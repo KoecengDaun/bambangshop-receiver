@@ -86,4 +86,10 @@ This is the place for you to write reflections:
 
 #### Reflection Subscriber-1
 
+##### **1. Mengapa saya perlu RwLock<Vec<Notification>>, dan mengapa tidak pakai Mutex?**  
+Saya menggunakan `RwLock` karena saya sering melakukan baca (*read*) terhadap daftar notifikasi. Dengan `RwLock`, banyak *reader* dapat berjalan sekaligus (selama tidak ada *writer*), sehingga akses bacanya lebih efisien. Jika saya memakai `Mutex`, setiap akses (baca maupun tulis) akan saling memblokir secara keseluruhan, sehingga semua thread lain harus menunggu, bahkan sekadar untuk *read*.  
+
+##### **2. Mengapa Rust tidak mengizinkan mutasi variabel statis secara langsung seperti di Java?**  
+Rust memiliki aturan keselamatan (*safety*) yang ketat terkait *threading* dan *memory ownership*. Membiarkan variabel `static` bermutasi bebas akan menimbulkan banyak risiko balapan data (*data race*). Dengan menggunakan `lazy_static` (dan pengaman seperti `RwLock` atau `DashMap`), saya memastikan setiap akses bersifat *thread-safe*. Di Java, mengakses atau memodifikasi *static* bisa dilakukan kapan saja, tetapi Rust mengharuskan saya secara eksplisit menyatakan penanganan *concurrency* agar terhindar dari *data race* dan pelanggaran aturan kepemilikan data.
+
 #### Reflection Subscriber-2
