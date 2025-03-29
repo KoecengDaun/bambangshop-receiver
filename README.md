@@ -93,3 +93,13 @@ Saya menggunakan `RwLock` karena saya sering melakukan baca (*read*) terhadap da
 Rust memiliki aturan keselamatan (*safety*) yang ketat terkait *threading* dan *memory ownership*. Membiarkan variabel `static` bermutasi bebas akan menimbulkan banyak risiko balapan data (*data race*). Dengan menggunakan `lazy_static` (dan pengaman seperti `RwLock` atau `DashMap`), saya memastikan setiap akses bersifat *thread-safe*. Di Java, mengakses atau memodifikasi *static* bisa dilakukan kapan saja, tetapi Rust mengharuskan saya secara eksplisit menyatakan penanganan *concurrency* agar terhindar dari *data race* dan pelanggaran aturan kepemilikan data.
 
 #### Reflection Subscriber-2
+
+##### **1. Apakah saya menjelajahi bagian di luar langkah-langkah tutorial (mis. `src/lib.rs`)?**  
+Saya hanya fokus pada petunjuk utama di tutorial, sehingga belum banyak menelusuri detail tambahan di `src/lib.rs`. Alasan utamanya karena waktu yang terbatas dan ingin segera menyelesaikan fitur utama sesuai spesifikasi. Jika ke depannya memiliki waktu lebih, saya akan menengok `src/lib.rs` atau bagian lain untuk memahami struktur proyek secara lebih menyeluruh.
+
+##### **2. Bagaimana *Observer Pattern* memudahkan saya menambah *subscriber* baru, dan bagaimana jika ada lebih dari satu instance Main app?**  
+Dengan *Observer Pattern*, saya hanya perlu menambahkan *subscriber* (Receiver) dan melakukan *subscribe* ke *publisher*. Begitu *subscriber* baru terdaftar, *publisher* akan otomatis mengirim notifikasi ketika ada peristiwa tertentu, tanpa saya harus menulis logika baru pada *publisher*.  
+Jika saya menjalankan banyak instance Main app, secara konsep masih bisa diterapkan Observer. Namun, saya mungkin perlu mekanisme sinkronisasi agar tiap *Main app* bisa berbagi daftar *subscriber* (jika memang diinginkan satu data terpusat) atau tiap instance punya list *subscriber*-nya sendiri. Ini tidak serumit menulis ulang logika notifikasi, tetapi perlu mempertimbangkan integrasi antar-instance.
+
+##### **3. Apakah saya membuat tes sendiri atau memperkaya dokumentasi Postman?**  
+Saya sudah menggunakan koleksi Postman bawaan tutorial, belum sempat menambahkan tes otomatis atau mendokumentasikan lebih rinci. Meski begitu, fitur Postman untuk menambahkan *test script* pada setiap request sangat berguna—misalnya untuk memeriksa status code dan respons JSON. Hal ini juga akan bermanfaat bagi proyek kelompok dalam memastikan bahwa setiap perubahan fitur tidak merusak fungsionalitas yang sudah ada.
